@@ -23,7 +23,8 @@ static void s_GotCopyRectProc               (rfbClient* c, int src_x, int src_y,
 
 RFBClientWapper::RFBClientWapper(rfbClient* c)
 {
-  auto rval = s_instances.emplace(c, this);
+  //auto rval = s_instances.emplace(c, this);
+  auto rval = s_instances.insert({c, this});
   //Q_ASSERT(rval.second);
   s_current = rval.first;
 
