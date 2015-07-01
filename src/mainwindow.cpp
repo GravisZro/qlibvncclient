@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget* parent, Qt::WindowFlags flags)
 {
   m_surface = new SurfaceWidget();
   m_surface->rfbConnect("localhost");
-  setCentralWidget(m_surface);
+  //m_surface->setShowFps(true);
 
+  setCentralWidget(m_surface);
 }

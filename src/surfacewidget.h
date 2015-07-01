@@ -3,7 +3,6 @@
 
 #include <QtWidgets>
 
-#include "macros.h"
 #include "rfbclientwapper.h"
 
 struct rfbExtraClientDataSegment
@@ -113,6 +112,7 @@ protected:
 
 private:
   QPixmap m_surfacePixmap;
+  QTimer* m_frameTimer;
   QBrush m_backgroundBrush;
   QBrush m_foregroundBrush;
   QBrush m_textBackgroundBrush;

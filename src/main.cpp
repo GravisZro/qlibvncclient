@@ -1,11 +1,10 @@
 #include <QApplication>
 #include "mainwindow.h"
-#include "macros.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    QCoreApplication::setApplicationName(QVNCVIEWER_APP_NAME);
+    QCoreApplication::setApplicationName("Qt VNC Client");
 
     // setup main window and run
     MainWindow* mainWindow = new MainWindow();

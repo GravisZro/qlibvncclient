@@ -34,7 +34,7 @@ void QRFBClient::getMessage(void)
   {
     if(HandleRFBServerMessage(client()))
     {
-      QTimer::singleShot(QVNCVIEWER_CONNPEND_TIMEOUT, Qt::CoarseTimer, this, SLOT(requestUpdate()));
+      QTimer::singleShot(100, Qt::CoarseTimer, this, SLOT(requestUpdate()));
     }
     else
     {
@@ -118,11 +118,17 @@ SurfaceWidget::SurfaceWidget(QWidget *parent)
   f.setPointSize(f.pointSize() * 2);
   setFont(f);
 
+  m_frameTimer = new QTimer(this);
+  m_frameTimer->setTimerType(Qt::CoarseTimer);
+  m_frameTimer->setInterval(1000);
+
+  connect(this, SIGNAL(connected()), m_frameTimer, SLOT(start()));
+  connect(this, SIGNAL(diconnected()), m_frameTimer, SLOT(stop()));
+  connect(m_frameTimer, SIGNAL(timeout()), this, SLOT(frameTimerTimeout()));
+
   connect(this, SIGNAL(connected()), this, SLOT(initialConnection()));
   connect(this, SIGNAL(framebufferResize(QSize)), this, SLOT(setSurfaceSize(QSize)));
   connect(this, SIGNAL(framebufferUpdate()), this, SLOT(updateSurface()));
-
-  QTimer::singleShot(QVNCVIEWER_ONE_SECOND, this, SLOT(frameTimerTimeout()));
 }
 
 SurfaceWidget::~SurfaceWidget()
@@ -185,7 +191,6 @@ void SurfaceWidget::frameTimerTimeout()
 {
   setCurrentFps(frameCounter());
   setFrameCounter(0);
-  QTimer::singleShot(QVNCVIEWER_ONE_SECOND, this, SLOT(frameTimerTimeout()));
 }
 
 bool SurfaceWidget::event(QEvent* e)

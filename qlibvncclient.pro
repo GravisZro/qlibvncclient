@@ -45,7 +45,6 @@ SOURCES += \
     src/surfacewidget.cpp
 
 HEADERS += \
-    src/macros.h \
     src/qt2keysum.h \
     src/rfbclientwapper.h \
     src/mainwindow.h \
