@@ -93,8 +93,6 @@ public:
   void incFrameCounter() { m_frameCounter++; }
   void setFrameCounter(int counter) { m_frameCounter = counter; }
 
-  int translateMouseButton(Qt::MouseButton button);
-
 public slots:
   void setSurfaceSize(QSize surfaceSize);
   void updateSurface();
@@ -109,6 +107,9 @@ protected:
   bool event(QEvent* e);
   void resizeEvent(QResizeEvent *e);
   void paintEvent(QPaintEvent *);
+
+private:
+  static int translateMouseButton(Qt::MouseButton button);
 
 private:
   QPixmap m_surfacePixmap;
