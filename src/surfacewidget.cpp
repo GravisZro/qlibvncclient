@@ -131,6 +131,10 @@ SurfaceWidget::~SurfaceWidget()
 
 void SurfaceWidget::initialConnection(void)
 {
+  QPixmap pixmap(1, 1);
+  pixmap.fill(Qt::transparent);
+  setCursor(QCursor(pixmap));
+
   setSurfaceSize({client()->width, client()->height});
   client()->updateRect.x = client()->updateRect.y = 0;
   client()->updateRect.w = client()->width;

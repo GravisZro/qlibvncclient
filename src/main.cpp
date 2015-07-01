@@ -10,5 +10,6 @@ int main(int argc, char *argv[])
     // setup main window and run
     MainWindow* mainWindow = new MainWindow();
     mainWindow->show();
+    mainWindow->setGeometry(app.desktop()->screenGeometry());
     return app.exec();
 }
