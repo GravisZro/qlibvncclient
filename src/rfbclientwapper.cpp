@@ -22,6 +22,7 @@ static void s_GotCopyRectProc               (rfbClient* c, int src_x, int src_y,
 
 
 RFBClientWapper::RFBClientWapper(rfbClient* c)
+  : m_connected(false)
 {
   //auto rval = s_instances.emplace(c, this);
   auto rval = s_instances.insert({c, this});
@@ -64,13 +65,13 @@ RFBClientWapper::~RFBClientWapper(void)
   s_instances.erase(s_current);
 }
 
-bool RFBClientWapper::rfbConnect(const char* hostname, int port) noexcept
+void RFBClientWapper::rfbConnect(const QString& hostname, int port)
 {
   try
   {
     rfbClient* c = client();
 
-    if(!ConnectToRFBServer(c, hostname, port))
+    if(!ConnectToRFBServer(c, hostname.toUtf8(), port))
       throw "unable to connect";
 
     if(!InitialiseRFBConnection(c))
@@ -89,19 +90,20 @@ bool RFBClientWapper::rfbConnect(const char* hostname, int port) noexcept
     c->height = c->si.framebufferHeight;
     c->frameBuffer = (uint8_t *)malloc(c->width * c->height * QVNCVIEWER_BYTES_PER_PIXEL);
 
-    return true;
+    m_connected = true;
   }
   catch(const char* err)
   {
     //qDebug() << "error connecting:" << err;
     rfbDisconnect();
-    return false;
   }
 }
 
 
-void RFBClientWapper::rfbDisconnect(void) noexcept
+void RFBClientWapper::rfbDisconnect(void)
 {
+  m_connected = false;
+
   //qDebug() << "disconnecting";
   rfbClient* c = client();
   if(c->sock)
@@ -117,5 +119,10 @@ void RFBClientWapper::rfbDisconnect(void) noexcept
   }
 
   ::rfbClientCleanup(c);
+}
+
+bool RFBClientWapper::isConnected(void)
+{
+  return m_connected;
 }
 

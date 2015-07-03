@@ -52,16 +52,16 @@ void QRFBClient::requestUpdate(void)
 
 void QRFBClient::rfbConnect(const QString& hostname, int port)
 {
-  m_connected = RFBClientWapper::rfbConnect(hostname.toUtf8(), port);
-  if(m_connected)
+  RFBClientWapper::rfbConnect(hostname, port);
+  if(isConnected())
     emit connected();
 }
 
 void QRFBClient::rfbDisconnect(void)
 {
   RFBClientWapper::rfbDisconnect();
-  m_connected = false;
-  emit disconnected();
+  if(!isConnected())
+    emit disconnected();
 }
 
 rfbBool QRFBClient::do_MallocFrameBuffer(void)
@@ -122,11 +122,12 @@ SurfaceWidget::SurfaceWidget(QWidget *parent)
   m_frameTimer->setTimerType(Qt::CoarseTimer);
   m_frameTimer->setInterval(1000);
 
-  connect(this, SIGNAL(connected()), m_frameTimer, SLOT(start()));
-  connect(this, SIGNAL(diconnected()), m_frameTimer, SLOT(stop()));
+
   connect(m_frameTimer, SIGNAL(timeout()), this, SLOT(frameTimerTimeout()));
 
   connect(this, SIGNAL(connected()), this, SLOT(initialConnection()));
+  connect(this, SIGNAL(disconnected()), this, SLOT(connectionLost()));
+
   connect(this, SIGNAL(framebufferResize(QSize)), this, SLOT(setSurfaceSize(QSize)));
   connect(this, SIGNAL(framebufferUpdate()), this, SLOT(updateSurface()));
 }
@@ -140,12 +141,20 @@ void SurfaceWidget::initialConnection(void)
   QPixmap pixmap(1, 1);
   pixmap.fill(Qt::transparent);
   setCursor(QCursor(pixmap));
+  m_frameTimer->start();
 
   setSurfaceSize({client()->width, client()->height});
   client()->updateRect.x = client()->updateRect.y = 0;
   client()->updateRect.w = client()->width;
   client()->updateRect.h = client()->height;
   SendIncrementalFramebufferUpdateRequest(client());
+}
+
+void SurfaceWidget::connectionLost(void)
+{
+  unsetCursor();
+  m_frameTimer->stop();
+  clearSurface();
 }
 
 void SurfaceWidget::setSurfaceSize(QSize surfaceSize)

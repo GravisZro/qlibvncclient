@@ -1,6 +1,7 @@
 #ifndef RFBCLIENTWAPPER_H
 #define RFBCLIENTWAPPER_H
 
+#include <QString>
 #include <rfb/rfbclient.h>
 #include <map>
 
@@ -104,8 +105,9 @@ public:
   RFBClientWapper(rfbClient* c);
   virtual ~RFBClientWapper(void);
 
-  bool rfbConnect(const char* hostname, int port = QVNCVIEWER_VNC_BASE_PORT) noexcept;
-  void rfbDisconnect(void) noexcept;
+  bool isConnected(void);
+  virtual void rfbConnect(const QString& hostname, int port = QVNCVIEWER_VNC_BASE_PORT);
+  virtual void rfbDisconnect(void);
 
   virtual void do_HandleTextChat            (int value, char *text)  { }
   virtual void do_HandleXvpMsg              (uint8_t version, uint8_t opcode)  { }
@@ -129,6 +131,7 @@ public:
   static void context(rfbClient* c) { s_current = s_instances.find(c); }
 
 private:
+  bool m_connected;
   static std::map<rfbClient*, RFBClientWapper*> s_instances;
   static std::map<rfbClient*, RFBClientWapper*>::iterator s_current;
 };

@@ -21,7 +21,6 @@ public:
   QRFBClient(QWidget* parent);
   virtual ~QRFBClient(void);
 
-  bool isConnected(void) const { return m_connected; }
   void rfbConnect(const QString& hostname, int port = QVNCVIEWER_VNC_BASE_PORT);
   void rfbDisconnect(void);
 
@@ -39,7 +38,6 @@ signals:
 protected:
   rfbBool do_MallocFrameBuffer(void);
   void do_GotFrameBufferUpdate(int x, int y, int w, int h);
-
 
   rfbExtraClientData& data(void) { context(m_client); return s_data[client()]; }
 
@@ -100,13 +98,14 @@ public slots:
   void clearSurface();
   void frameTimerTimeout();
 
-protected slots:
-  void initialConnection(void);
-
 protected:
   bool event(QEvent* e);
   void resizeEvent(QResizeEvent *e);
   void paintEvent(QPaintEvent *);
+
+protected slots:
+  void initialConnection(void);
+  void connectionLost(void);
 
 private:
   static int translateMouseButton(Qt::MouseButton button);
