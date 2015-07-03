@@ -5,16 +5,16 @@
 #include <QtCore>
 
 //#include "surfacewidget.h"
-class SurfaceWidget;
+class CSurfaceWidget;
 
-class MainWindow : public QMainWindow
+class CMainWindow : public QMainWindow
 {
   Q_OBJECT
 public:
-  MainWindow(QWidget* parent = nullptr, Qt::WindowFlags flags = Qt::Widget);
+  CMainWindow(QWidget* parent = nullptr, Qt::WindowFlags flags = Qt::Widget);
 
 private:
-  SurfaceWidget* m_surface;
+  CSurfaceWidget* m_surface;
 };
 
 #endif // MAINWINDOW_H

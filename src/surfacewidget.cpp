@@ -89,7 +89,7 @@ void QRFBClient::do_GotFrameBufferUpdate(int x, int y, int w, int h)
   emit framebufferUpdate();
 }
 
-SurfaceWidget::SurfaceWidget(QWidget *parent)
+CSurfaceWidget::CSurfaceWidget(QWidget *parent)
   : QRFBClient(parent),
     m_surfacePixmap(-1, -1),
     m_scale(1.0),
@@ -132,11 +132,11 @@ SurfaceWidget::SurfaceWidget(QWidget *parent)
   connect(this, SIGNAL(framebufferUpdate()), this, SLOT(updateSurface()));
 }
 
-SurfaceWidget::~SurfaceWidget()
+CSurfaceWidget::~CSurfaceWidget()
 {
 }
 
-void SurfaceWidget::initialConnection(void)
+void CSurfaceWidget::initialConnection(void)
 {
   QPixmap pixmap(1, 1);
   pixmap.fill(Qt::transparent);
@@ -150,14 +150,14 @@ void SurfaceWidget::initialConnection(void)
   SendIncrementalFramebufferUpdateRequest(client());
 }
 
-void SurfaceWidget::connectionLost(void)
+void CSurfaceWidget::connectionLost(void)
 {
   unsetCursor();
   m_frameTimer->stop();
   clearSurface();
 }
 
-void SurfaceWidget::setSurfaceSize(QSize surfaceSize)
+void CSurfaceWidget::setSurfaceSize(QSize surfaceSize)
 {
   m_surfacePixmap = QPixmap(surfaceSize);
   m_surfacePixmap.fill(backgroundBrush().color());
@@ -168,7 +168,7 @@ void SurfaceWidget::setSurfaceSize(QSize surfaceSize)
   QTimer::singleShot(0, this, SLOT(updateSurface()));
 }
 
-int SurfaceWidget::translateMouseButton(Qt::MouseButton button)
+int CSurfaceWidget::translateMouseButton(Qt::MouseButton button)
 {
   switch(button)
   {
@@ -179,13 +179,13 @@ int SurfaceWidget::translateMouseButton(Qt::MouseButton button)
   }
 }
 
-void SurfaceWidget::updateSurface()
+void CSurfaceWidget::updateSurface()
 {
   resizeEvent(0);
   update();
 }
 
-void SurfaceWidget::clearSurface()
+void CSurfaceWidget::clearSurface()
 {
   if(m_surfacePixmap.isNull())
     setSurfaceSize({client()->width, client()->height});
@@ -196,13 +196,13 @@ void SurfaceWidget::clearSurface()
   setFrameCounter(0);
 }
 
-void SurfaceWidget::frameTimerTimeout()
+void CSurfaceWidget::frameTimerTimeout()
 {
   setCurrentFps(frameCounter());
   setFrameCounter(0);
 }
 
-bool SurfaceWidget::event(QEvent* e)
+bool CSurfaceWidget::event(QEvent* e)
 {
   if(isConnected())
   {
@@ -260,7 +260,7 @@ bool SurfaceWidget::event(QEvent* e)
   return QWidget::event(e);
 }
 
-void SurfaceWidget::resizeEvent(QResizeEvent *e)
+void CSurfaceWidget::resizeEvent(QResizeEvent *e)
 {
   if (!m_surfacePixmap.isNull())
   {
@@ -299,7 +299,7 @@ void SurfaceWidget::resizeEvent(QResizeEvent *e)
     QWidget::resizeEvent(e);
 }
 
-void SurfaceWidget::paintEvent(QPaintEvent *)
+void CSurfaceWidget::paintEvent(QPaintEvent *)
 {
   if(isConnected())
   {

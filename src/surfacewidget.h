@@ -51,12 +51,12 @@ private:
   bool m_connected;
 };
 
-class SurfaceWidget : public QRFBClient
+class CSurfaceWidget : public QRFBClient
 {
   Q_OBJECT
 public:
-  SurfaceWidget(QWidget *parent = nullptr);
-  ~SurfaceWidget();
+  CSurfaceWidget(QWidget *parent = nullptr);
+  ~CSurfaceWidget();
 
   QSize surfaceSize() { return m_surfacePixmap.size(); }
 

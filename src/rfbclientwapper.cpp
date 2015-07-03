@@ -95,7 +95,7 @@ void RFBClientWapper::rfbConnect(const QString& hostname, int port)
   catch(const char* err)
   {
     //qDebug() << "error connecting:" << err;
-    rfbDisconnect();
+    RFBClientWapper::rfbDisconnect();
   }
 }
 

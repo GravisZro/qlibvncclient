@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("Qt VNC Client");
 
     // setup main window and run
-    MainWindow* mainWindow = new MainWindow();
+    CMainWindow* mainWindow = new CMainWindow();
     mainWindow->show();
     mainWindow->setGeometry(app.desktop()->screenGeometry());
     return app.exec();
