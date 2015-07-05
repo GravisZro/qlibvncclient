@@ -4,7 +4,6 @@
 #include <QtWidgets>
 #include <QtCore>
 
-//#include "surfacewidget.h"
 class CSurfaceWidget;
 
 class CMainWindow : public QMainWindow

@@ -61,7 +61,7 @@ RFBClientWapper::RFBClientWapper(rfbClient* c)
 
 RFBClientWapper::~RFBClientWapper(void)
 {
-  rfbDisconnect();
+  RFBClientWapper::rfbDisconnect();
   s_instances.erase(s_current);
 }
 

@@ -246,9 +246,9 @@ bool CSurfaceWidget::event(QEvent* e)
       case QEvent::KeyRelease:
       {
         QKeyEvent* keyEvent = static_cast<QKeyEvent*>(e);
-        SendKeyEvent(client(), qt2keysym(keyEvent->key()), false);
+        SendKeyEvent(client(), qt2keysym(keyEvent->key()), e->type() == QEvent::KeyPress);
         if ( keyEvent->key() == Qt::Key_Alt )
-          setFocus();
+          setFocus(); // avoid losing focus
         return true; // prevent futher processing of event
       }
 
